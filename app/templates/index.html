@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis de Costos Médicos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .plot-container {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .plot-title {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .metrics-card {
+            margin: 20px 0;
+        }
+        .table-container {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .table {
+            margin-bottom: 0;
+        }
+        .table th {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Análisis de Costos Médicos</h1>
+
+        <!-- Análisis de Outliers -->
+        <div class="plot-container">
+            <h2 class="plot-title">Análisis de Outliers</h2>
+            <img src="data:image/png;base64,{{ outliers_plot }}" class="img-fluid" alt="Análisis de Outliers">
+        </div>
+
+        <!-- Matriz de Correlación -->
+        <div class="plot-container">
+            <h2 class="plot-title">Matriz de Correlación</h2>
+            <img src="data:image/png;base64,{{ correlation_plot }}" class="img-fluid" alt="Matriz de Correlación">
+        </div>
+
+        <!-- Análisis PCA -->
+        <div class="plot-container">
+            <h2 class="plot-title">Análisis de Componentes Principales (PCA)</h2>
+            <img src="data:image/png;base64,{{ pca_plot }}" class="img-fluid" alt="Análisis PCA">
+        </div>
+
+        <!-- Importancia de Características -->
+        <div class="table-container">
+            <h2 class="plot-title">Importancia de Características</h2>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Característica</th>
+                            <th>Ganancia de Información</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for feature, score in mi_scores.items() %}
+                        <tr>
+                            <td>{{ feature }}</td>
+                            <td>{{ "%.4f"|format(score) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Comparación de Modelos -->
+        <div class="table-container">
+            <h2 class="plot-title">Comparación de Modelos</h2>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Modelo</th>
+                            <th>R²</th>
+                            <th>RMSE</th>
+                            <th>MAE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for model_name, metrics in models.items() %}
+                        <tr>
+                            <td>{{ model_name }}</td>
+                            <td>{{ "%.4f"|format(metrics['R-Squared']) }}</td>
+                            <td>{{ "%.4f"|format(metrics['RMSE']) }}</td>
+                            <td>{{ "%.4f"|format(metrics['MAE']) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Métricas del Mejor Modelo -->
+        <div class="metrics-card">
+            <h2 class="plot-title">Métricas del Mejor Modelo ({{ metrics.model }})</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">MSE</h5>
+                            <p class="card-text">{{ "%.2f"|format(metrics.mse) }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">MAE</h5>
+                            <p class="card-text">{{ "%.2f"|format(metrics.mae) }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">R²</h5>
+                            <p class="card-text">{{ "%.2f"|format(metrics.r2) }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Predicciones vs Valores Reales -->
+        <div class="plot-container">
+            <h2 class="plot-title">Predicciones vs Valores Reales</h2>
+            <img src="data:image/png;base64,{{ predictions_plot }}" class="img-fluid" alt="Predicciones vs Valores Reales">
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
