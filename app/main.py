@@ -23,8 +23,13 @@ app = FastAPI()
 # Obtener el directorio actual
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
+# Crear directorio static si no existe
+static_dir = os.path.join(current_dir, "static")
+if not os.path.exists(static_dir):
+    os.makedirs(static_dir)
+
 # Montar archivos estáticos
-app.mount("/static", StaticFiles(directory=os.path.join(current_dir, "static")), name="static")
+app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 # Configurar templates
 templates = Jinja2Templates(directory=os.path.join(current_dir, "templates"))
@@ -42,7 +47,18 @@ def get_plot_as_base64():
     return img_str
 
 def load_data():
+    """Cargar datos del archivo CSV o descargarlos si no existen"""
     csv_path = os.path.join(current_dir, 'insurance.csv')
+    
+    # Si el archivo no existe, descargarlo
+    if not os.path.exists(csv_path):
+        import urllib.request
+        url = "https://raw.githubusercontent.com/stedy/Machine-Learning-with-R-datasets/master/insurance.csv"
+        print(f"Descargando datos desde {url}")
+        urllib.request.urlretrieve(url, csv_path)
+        print("Datos descargados exitosamente")
+    
+    # Cargar los datos
     df = pd.read_csv(csv_path)
     return df
 

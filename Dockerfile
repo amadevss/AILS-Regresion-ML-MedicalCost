@@ -7,6 +7,9 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
+# Crear directorios necesarios
+RUN mkdir -p /app/app/static /app/app/templates
+
 # Copiar los archivos de requisitos primero para aprovechar la caché de Docker
 COPY requirements.txt .
 
@@ -15,6 +18,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copiar el resto de la aplicación
 COPY . .
+
+# Asegurarse de que los directorios existan
+RUN mkdir -p /app/app/static /app/app/templates
 
 # Exponer el puerto que usa FastAPI
 EXPOSE 8000

@@ -134,4 +134,17 @@ Si deseas contribuir al proyecto:
 
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles. 
+Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
+
+## 📊 Dataset
+
+El proyecto utiliza el dataset de seguros médicos de Kaggle, que incluye las siguientes variables:
+- age: edad del beneficiario
+- sex: género del beneficiario
+- bmi: índice de masa corporal
+- children: número de hijos cubiertos por el seguro
+- smoker: si el beneficiario fuma o no
+- region: región de residencia
+- charges: costos médicos individuales (variable objetivo)
+
+El dataset se descarga automáticamente al iniciar la aplicación si no está presente. 
